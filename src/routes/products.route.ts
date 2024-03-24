@@ -14,17 +14,25 @@ const productsRouter: Router = Router();
 productsRouter.get("/", async (req: Request, res: Response) => {
   try {
     const productManagerDB: ProductManagerDB = new ProductManagerDB();
-    let limitParsed: number = await productManagerDB.getTotalProducts();
+    // let limitParsed: number = await productManagerDB.getTotalProducts();
+    let limitParsed: number = 10;
+    let pageParsed: number = 1;
     const queryParams: QueryParams = validateQueryParams(req.query);
     if (!queryParams) {
       throw new Error("Query Params inválidos.");
     }
-    const { limit } = queryParams;
+    const { limit, page, sort, query } = queryParams;
     if (limit) {
       limitParsed = parseInt(limit);
     }
+    if (page) {
+      pageParsed = parseInt(page);
+    }
     const products: DbProduct[] = await productManagerDB.getProducts(
-      limitParsed
+      limitParsed,
+      pageParsed,
+      sort,
+      query
     );
     res.json(products);
   } catch (error) {
