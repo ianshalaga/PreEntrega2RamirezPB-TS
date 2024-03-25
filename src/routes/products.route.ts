@@ -7,6 +7,7 @@ import validateQueryParams from "../validators/queryParams";
 import validateUpdateProduct from "../validators/updateProduct";
 import Product from "../interfaces/Product";
 import DbProduct from "../interfaces/DbProduct";
+import GetProduct from "../interfaces/GetProduct";
 
 const productsRouter: Router = Router();
 
@@ -28,7 +29,7 @@ productsRouter.get("/", async (req: Request, res: Response) => {
     if (page) {
       pageParsed = parseInt(page);
     }
-    const products: DbProduct[] = await productManagerDB.getProducts(
+    const products: GetProduct = await productManagerDB.getProducts(
       limitParsed,
       pageParsed,
       sort,
@@ -36,7 +37,18 @@ productsRouter.get("/", async (req: Request, res: Response) => {
     );
     res.json(products);
   } catch (error) {
-    res.status(404).json(failureStatus(error.message));
+    // res.status(404).json(failureStatus(error.message));
+    const products: GetProduct = {
+      status: "error",
+      payload: [],
+      totalPages: 0,
+      prevPage: null,
+      nextPage: null,
+      page: 0,
+      hasPrevPage: false,
+      hasNextPage: false,
+    };
+    res.json(products);
   }
 });
 

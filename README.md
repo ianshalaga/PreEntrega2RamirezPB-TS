@@ -92,6 +92,10 @@ Enlace al repositorio de **GitHub** con el proyecto completo, sin la carpeta de 
 
 > **Mongoose** es una biblioteca de modelado de objetos de **MongoDB** para **Node.js**. Proporciona una solución basada en esquemas para modelar datos de aplicaciones utilizando **MongoDB**, lo que facilita la interacción con la base de datos **MongoDB** desde una aplicación **Node.js**.
 
+- `npm i mongoose-paginate-v2`
+
+> **mongoose-paginate-v2** proporciona funcionalidades de paginación para consultas en **MongoDB** utilizando **Mongoose**.
+
 ## devDependencies
 
 - `npm i nodemon -D`

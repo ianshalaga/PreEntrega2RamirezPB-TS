@@ -21,7 +21,7 @@ function validateQueryParams(data: any): QueryParams {
     try {
       parsedQuery = JSON.parse(query);
     } catch (error) {
-      throw new Error("Error al analizar la cadena JSON en query:");
+      throw new Error("Error al analizar el string JSON en query.");
     }
   }
   const validationResult = queryParamsSchema.safeParse({
