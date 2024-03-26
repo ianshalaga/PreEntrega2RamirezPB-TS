@@ -3,6 +3,8 @@ import DbCart from "../../interfaces/DbCart";
 import Cart from "../../interfaces/Cart";
 import ProductManagerDB from "./ProductManagerDB";
 import DbProduct from "../../interfaces/DbProduct";
+import ProductCart from "../../interfaces/ProductCart";
+import { productsModel } from "../models/products.model";
 
 export class CartManagerDB {
   constructor() {}
@@ -34,7 +36,7 @@ export class CartManagerDB {
   // @@@@
   async getCartById(id: string): Promise<DbCart> {
     try {
-      const cart = await cartsModel.findById(id);
+      const cart = await cartsModel.findById(id).populate("products.product");
       const dbCart: DbCart = await cart.toObject();
       return dbCart;
     } catch (error) {
@@ -45,15 +47,11 @@ export class CartManagerDB {
   // @@@@
   async addProductToCart(cid: string, pid: string): Promise<void> {
     try {
-      const productManagerDB: ProductManagerDB = new ProductManagerDB();
-      const product: DbProduct = await productManagerDB.getProductById(pid);
-      let cart: DbCart = await this.getCartById(cid);
-
+      const cart = await cartsModel.findById(cid);
+      const dbCart: DbCart = await cart.toObject();
       let productExist = false;
-
-      const updatedCart = cart.products.map((productInCart) => {
-        if (productInCart.product.toString() === product._id.toString()) {
-          console.log(productExist);
+      const updatedProducts = dbCart.products.map((productInCart) => {
+        if (productInCart.product.toString() === pid) {
           productExist = true;
           const productCart = {
             product: productInCart.product,
@@ -63,21 +61,77 @@ export class CartManagerDB {
         }
         return productInCart;
       });
-
-      cart = {
-        _id: cart._id,
-        products: updatedCart,
-      };
-
+      dbCart.products = updatedProducts;
       if (!productExist) {
         const productCart = {
-          product: product._id,
+          product: pid,
           quantity: 1,
         };
-        cart.products.push(productCart);
+        dbCart.products.push(productCart);
       }
+      await cartsModel.updateOne({ _id: cid }, { $set: dbCart });
+    } catch (error) {
+      throw error;
+    }
+  }
 
-      await cartsModel.updateOne({ _id: cid }, { $set: cart });
+  // @@@@
+  async removeProductFromCart(cid: string, pid: string): Promise<void> {
+    try {
+      const cart = await cartsModel.findById(cid);
+      const dbCart: DbCart = await cart.toObject();
+      const updatedProducts = [];
+      dbCart.products.forEach((productInCart) => {
+        if (!(productInCart.product.toString() === pid)) {
+          updatedProducts.push(productInCart);
+        }
+      });
+      dbCart.products = updatedProducts;
+      await cartsModel.updateOne({ _id: cid }, { $set: dbCart });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // @@@@
+  async updateCart(cid: string, updateProducts: ProductCart[]): Promise<void> {
+    try {
+      const cart = await cartsModel.findById(cid);
+      const dbCart: DbCart = await cart.toObject();
+      dbCart.products = updateProducts;
+      await cartsModel.updateOne({ _id: cid }, { $set: dbCart });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // @@@@
+  async updateProductQuantity(
+    cid: string,
+    pid: string,
+    quantity: number
+  ): Promise<void> {
+    try {
+      const cart = await cartsModel.findById(cid);
+      const dbCart: DbCart = await cart.toObject();
+      dbCart.products.forEach((product) => {
+        if (product.product.toString() === pid) {
+          product.quantity = quantity;
+        }
+      });
+      await cartsModel.updateOne({ _id: cid }, { $set: dbCart });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // @@@@
+  async clearCart(cid: string): Promise<void> {
+    try {
+      const cart = await cartsModel.findById(cid);
+      const dbCart: DbCart = await cart.toObject();
+      dbCart.products = [];
+      await cartsModel.updateOne({ _id: cid }, { $set: dbCart });
     } catch (error) {
       throw error;
     }

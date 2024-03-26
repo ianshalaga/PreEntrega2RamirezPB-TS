@@ -19,7 +19,7 @@ function validateUpdateProduct(data: any): UpdateProduct {
   if (validationResult.success) {
     return validationResult.data;
   } else {
-    throw new Error("Objeto de actuaización inválido.");
+    throw new Error("Objeto de actualización inválido.");
   }
 }
 

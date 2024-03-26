@@ -3,7 +3,7 @@ import { Express } from "express";
 import productsRouter from "./routes/products.route";
 import cartsRouter from "./routes/carts.route";
 import { PORT } from "./utils/ports";
-import { rootPath, productsPath } from "./utils/paths";
+import { rootPath } from "./utils/paths";
 import { apiRoute, productsRoute, cartsRoute } from "./utils/routes";
 import handlebars from "express-handlebars";
 import viewsRouter from "./routes/views.route";
