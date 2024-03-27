@@ -13,6 +13,7 @@ import connectDB from "./utils/db";
 import ProductManagerDB from "./dao/services/ProductManagerDB";
 import DbProduct from "./interfaces/DbProduct";
 import messagesModel from "./dao/models/messages.model";
+import GetProduct from "./interfaces/GetProduct";
 
 const app: Express = express(); // Express.js application instance creation
 
@@ -41,17 +42,24 @@ const messages = [];
 
 io.on("connection", async (socket) => {
   console.log("Cliente conectado");
+  const limit = 1000;
+  const page = 1;
   const productManagerDB: ProductManagerDB = new ProductManagerDB();
-  let products: DbProduct[] = await productManagerDB.getProducts();
+  let products: GetProduct = await productManagerDB.getProducts(
+    limit,
+    page,
+    null,
+    null
+  );
 
-  socket.emit("products", products);
+  socket.emit("products", products.payload);
 
   socket.on("newProduct", async (newProduct: Product) => {
     console.log("Nuevo producto");
     console.log(newProduct);
     await productManagerDB.addProduct(newProduct);
-    products = await productManagerDB.getProducts();
-    socket.emit("products", products);
+    products = await productManagerDB.getProducts(limit, page, null, null);
+    socket.emit("products", products.payload);
   });
 
   socket.on("message", async (data) => {

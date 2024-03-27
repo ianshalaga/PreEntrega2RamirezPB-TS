@@ -56,32 +56,11 @@ class ProductManagerDB {
     query: query
   ): Promise<GetProduct> {
     try {
-      // const pipeline = [];
-      // if (query) {
-      //   if ("category" in query && query.category) {
-      //     pipeline.push({ $match: { category: query.category } });
-      //   }
-      //   if ("status" in query && query.status) {
-      //     pipeline.push({ $match: { status: JSON.parse(query.status) } });
-      //   }
-      // }
-      // if (sort) {
-      //   if (sort === "asc") pipeline.push({ $sort: { price: 1 } });
-      //   else pipeline.push({ $sort: { price: -1 } });
-      // }
-      // if (limit) {
-      //   pipeline.push({ $limit: limit });
-      // }
-      // // @@@@
-      // if (page) {
-      //   pipeline.push({ $skip: (page - 1) * limit });
-      // }
-      // const products = await productsModel.aggregate(pipeline);
-      // return products;
       const options = {
         limit: limit,
         page: page,
         sort: sort === "asc" ? { price: 1 } : { price: -1 },
+        lean: true,
       };
       const result = await productsModel.paginate(query, options);
       const products: GetProduct = {

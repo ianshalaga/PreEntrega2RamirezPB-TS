@@ -15,14 +15,11 @@ const productsRouter: Router = Router();
 productsRouter.get("/", async (req: Request, res: Response) => {
   try {
     const productManagerDB: ProductManagerDB = new ProductManagerDB();
-    // let limitParsed: number = await productManagerDB.getTotalProducts();
     let limitParsed: number = 10;
     let pageParsed: number = 1;
     const queryParams: QueryParams = validateQueryParams(req.query);
-    if (!queryParams) {
-      throw new Error("Query Params inválidos.");
-    }
     const { limit, page, sort, query } = queryParams;
+    // @@@@ Pendiente: Validar que el parseo a entero de limit y page de un número válido.
     if (limit) {
       limitParsed = parseInt(limit);
     }
@@ -37,7 +34,6 @@ productsRouter.get("/", async (req: Request, res: Response) => {
     );
     res.json(products);
   } catch (error) {
-    // res.status(404).json(failureStatus(error.message));
     const products: GetProduct = {
       status: "error",
       payload: [],

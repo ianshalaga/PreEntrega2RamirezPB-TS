@@ -1,0 +1,19 @@
+<h1>Cart ID: {{cart._id}}</h1>
+<div class="">
+    <ul class="flex flex-col">
+        {{#each cart.products}}
+        <li class="grid grid-cols-9 overflow-x-hidden items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
+            <p class="flex">Product ID: {{product._id}}</p>
+            <p class="flex">Title: {{product.title}}</p>
+            <p class="flex">Description: {{product.description}}</p>
+            <p class="flex">Code: {{product.code}}</p>
+            <p class="flex">Price: {{product.price}}</p>
+            <p class="flex">Stock: {{product.stock}}</p>
+            <p class="flex">Category: {{product.category}}</p>
+            <p class="flex">Status: {{product.status}}</p>
+            <p class="flex">Thumbnail: {{product.thumbnail}}</p>
+            <p class="flex">Quantity: {{quantity}}</p>
+        </li>
+        {{/each}}
+    </ul>
+</div>

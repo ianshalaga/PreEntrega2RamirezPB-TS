@@ -14,7 +14,6 @@ const queryParamsSchema = z.object({
 });
 
 function validateQueryParams(data: any): QueryParams {
-  let validatedData: QueryParams = null;
   const { limit, page, sort, query } = data;
   let parsedQuery = undefined;
   if (query) {
@@ -32,10 +31,10 @@ function validateQueryParams(data: any): QueryParams {
   });
 
   if (validationResult.success) {
-    validatedData = validationResult.data;
+    return validationResult.data;
+  } else {
+    throw new Error("Query Params inválidos.");
   }
-
-  return validatedData;
 }
 
 export default validateQueryParams;
