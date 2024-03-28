@@ -8,5 +8,8 @@
     <p class="flex">Category: {{product.category}}</p>
     <p class="flex">Status: {{product.status}}</p>
     <p class="flex">Thumbnail: {{product.thumbnail}}</p>
-    <a href="">Agregar al carrito</a>
+    {{!-- Pendiente hasta definir el carro. --}}
+    <form action="/carts/{{cartId}}/products/{{product._id}}" method="POST">
+        <button type="submit">Agregar al carrito</button>
+    </form>
 </div>

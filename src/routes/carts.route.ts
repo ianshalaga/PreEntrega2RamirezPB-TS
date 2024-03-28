@@ -86,7 +86,6 @@ cartsRouter.put(
       const cid: string = req.params.cid;
       const pid: string = req.params.pid;
       const quantity: number = validateNumber(req.body);
-      console.log(quantity);
       await cartManagerDB.updateProductQuantity(cid, pid, quantity);
       res.json(successStatus);
     } catch (error) {

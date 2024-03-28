@@ -106,10 +106,7 @@ viewsRouter.get(productsRoute, async (req: Request, res: Response) => {
       ...products,
       nextLink,
       prevLink,
-      PORT,
-      productRoute,
     };
-    console.log(productsTemplate);
     res.render("products", {
       title: "Products",
       style: "app.css",
